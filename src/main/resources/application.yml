@@ -1,0 +1,34 @@
+server:
+  port: 8080
+camel:
+  springboot:
+    name: CamelDemoMq
+management:
+  port: 8081
+endpoints:
+  enabled: false
+  health:
+    enabled: true
+quickstart:
+  generateOrderPeriod: 10s
+  processOrderPeriod: 30s
+
+# MQ配置
+egoo:
+  mq:
+    #engine: rabbit
+    rabbit:
+      hostname: test.viviuc.com
+      username: root
+      password: Myegoo3466
+      autoDelete: false
+    rocket:
+      namesrvAddr: test.viviuc.com:9876
+  producer:
+    uri:
+      event.rabbit: rabbitmq:ex.camel.demo?hostname=${egoo.mq.rabbit.hostname}&username=${egoo.mq.rabbit.username}&password=${egoo.mq.rabbit.password}&autoDelete=${egoo.mq.rabbit.autoDelete}&queue=ex.camel.demo.event
+      event.rocket: rocketmq:egoo_camel_demo?namesrvAddr=${egoo.mq.rocket.namesrvAddr}&producerGroup=egoo_camel_demo
+  consumer:
+    uri:
+      event.rabbit: rabbitmq:ex.camel.demo?hostname=${egoo.mq.rabbit.hostname}&username=${egoo.mq.rabbit.username}&password=${egoo.mq.rabbit.password}&autoDelete=${egoo.mq.rabbit.autoDelete}&queue=ex.camel.demo.event&threadPoolSize=1&autoAck=false
+      event.rocket: rocketmq:egoo_camel_demo?namesrvAddr=${egoo.mq.rocket.namesrvAddr}&consumerGroup=egoo_camel_demo
